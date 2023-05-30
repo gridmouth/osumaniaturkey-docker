@@ -79,7 +79,7 @@ export class DiscordBot extends Client {
       )
         return;
 
-      button.deferReply({ ephemeral: true });
+      await button.deferReply({ ephemeral: true });
 
       const newVerification =
         await VerificationManager.createNewVerificationToken(
