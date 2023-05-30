@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "es6",
+    "allowJs": true,
+    "moduleResolution": "node"
+  },
+  "include": ["vite.config.ts"]
+}
