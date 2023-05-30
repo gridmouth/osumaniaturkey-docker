@@ -9,6 +9,7 @@ import {
   rankroles,
   users,
   verifications,
+  verifiedroles,
 } from "../../database/database";
 import { GuildMember } from "discord.js";
 import { randomBytes } from "crypto";
@@ -170,6 +171,9 @@ export class VerificationManager {
       const rankRoles = await this.addRankRoles();
       if (rankRoles.status != 200) return rankRoles;
 
+      const verifiedRoles = await this.addVerifiedRoles();
+      if (verifiedRoles.status != 200) return verifiedRoles;
+
       if (!isStatic)
         await verifications.deleteOne({ _id: this.verification._id });
 
@@ -209,6 +213,22 @@ export class VerificationManager {
   async syncUsername() {
     try {
       await this.member.setNickname(this.user.username);
+
+      return this.handleResponse(200);
+    } catch (e) {
+      console.error(e);
+
+      return this.handleResponse(500);
+    }
+  }
+
+  async addVerifiedRoles() {
+    try {
+      const allRoles = await verifiedroles.find();
+
+      for (const role of allRoles) {
+        await this.member.roles.add(role._id);
+      }
 
       return this.handleResponse(200);
     } catch (e) {
