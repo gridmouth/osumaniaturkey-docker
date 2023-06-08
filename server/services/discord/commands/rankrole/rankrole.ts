@@ -2,6 +2,7 @@ import { PermissionsBitField } from "discord.js";
 import { SlashCommand } from "../../models/SlashCommand";
 import rankroleAddRole from "./rankroleAddRole";
 import rankroleRemoveRole from "./rankroleRemoveRole";
+import rankroleList from "./rankroleList";
 
 const rankrole = new SlashCommand(
   "rankrole",
@@ -12,6 +13,9 @@ const rankrole = new SlashCommand(
   [PermissionsBitField.Flags.Administrator]
 );
 
-rankrole.addSubcommand(rankroleAddRole).addSubcommand(rankroleRemoveRole);
+rankrole
+  .addSubcommand(rankroleAddRole)
+  .addSubcommand(rankroleRemoveRole)
+  .addSubcommand(rankroleList);
 
 export default rankrole;

@@ -2,6 +2,7 @@ import { PermissionsBitField } from "discord.js";
 import { SlashCommand } from "../../models/SlashCommand";
 import verifiedRoleAddRole from "./verifiedRoleAddRole";
 import verifiedRoleRemoveRole from "./verifiedRoleRemoveRole";
+import verifiedroleList from "./verifiedRoleList";
 
 const verifiedRole = new SlashCommand(
   "verifiedrole",
@@ -14,6 +15,7 @@ const verifiedRole = new SlashCommand(
 
 verifiedRole
   .addSubcommand(verifiedRoleAddRole)
-  .addSubcommand(verifiedRoleRemoveRole);
+  .addSubcommand(verifiedRoleRemoveRole)
+  .addSubcommand(verifiedroleList);
 
 export default verifiedRole;
