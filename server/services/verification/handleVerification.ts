@@ -242,7 +242,7 @@ export class VerificationManager {
     try {
       const rankRoles = await rankroles.find();
 
-      this.member.fetch(true);
+      await this.member.fetch(true);
 
       for (const role of rankRoles) {
         if (
