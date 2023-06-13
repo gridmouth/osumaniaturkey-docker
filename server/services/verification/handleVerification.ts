@@ -282,11 +282,13 @@ export class VerificationManager {
           const targetGroupForThisRole = this.user.groups.find((g) => {
             if (
               g.short_name != roleParameters.group ||
-              (g.has_playmodes && roleParameters.mode == "none") ||
-              (!g.playmodes && g.has_playmodes) ||
-              !g.playmodes.includes(roleParameters.mode)
+              (g.has_playmodes && roleParameters.mode == "none")
             )
               return false;
+
+            if (g.has_playmodes) {
+              if (!g.playmodes.includes(roleParameters.mode)) return false;
+            }
 
             return true;
           });
