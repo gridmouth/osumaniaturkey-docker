@@ -255,8 +255,7 @@ export class VerificationManager {
           ) {
             await this.member.roles.add(role.roleId);
           } else {
-            if (this.member.roles.cache.has(role.roleId))
-              await this.member.roles.remove(role.roleId);
+            await this.member.roles.remove(role.roleId).catch(() => void {});
           }
         }
       }
