@@ -254,6 +254,9 @@ export class VerificationManager {
             this.user.statistics_rulesets.osu.global_rank <= (role.max || 0)
           ) {
             await this.member.roles.add(role.roleId);
+          } else {
+            if (this.member.roles.cache.has(role.roleId))
+              await this.member.roles.remove(role.roleId);
           }
         }
       }
