@@ -40,6 +40,10 @@ grouproleAddGroupRole.builder
           value: "LVD,false",
         },
         {
+          name: "Beatmap Spotlight Curators",
+          value: "BSC,false",
+        },
+        {
           name: "Alumni",
           value: "ALM,false",
         }

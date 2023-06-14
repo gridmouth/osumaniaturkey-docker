@@ -20,7 +20,10 @@ grouproleList.setExecuteFunction(async (command) => {
           ? "Nothing to show here..."
           : allRoles
               .map(
-                (r, i) => `- ${i + 1} <@&${r.roleId}> | ${r.group} | ${r.mode}`
+                (r, i) =>
+                  `- ${i + 1} <@&${r.roleId}> | ${r.group.split(",")[0]}${
+                    r.group.split(",")[1] == "true" ? `("Probationary")` : ""
+                  } | ${r.mode}`
               )
               .join("\n")
       )
