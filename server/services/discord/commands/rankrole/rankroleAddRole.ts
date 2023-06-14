@@ -19,7 +19,7 @@ rankroleAddRole.builder
       .setDescription("Minimum rank")
       .setRequired(true)
       .setMinValue(1)
-      .setMaxValue(2500000)
+      .setMaxValue(9999999)
   )
   .addIntegerOption((o) =>
     o
@@ -27,7 +27,7 @@ rankroleAddRole.builder
       .setDescription("Maximum rank")
       .setRequired(true)
       .setMinValue(1)
-      .setMaxValue(2500000)
+      .setMaxValue(9999999)
   )
   .addRoleOption((o) =>
     o.setName("role").setDescription("Role to add").setRequired(true)
