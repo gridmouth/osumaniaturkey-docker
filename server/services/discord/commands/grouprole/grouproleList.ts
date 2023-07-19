@@ -23,7 +23,7 @@ grouproleList.setExecuteFunction(async (command) => {
                 (r, i) =>
                   `- ${i + 1} <@&${r.roleId}> | ${r.group.split(",")[0]}${
                     r.group.split(",")[1].trim() == "true"
-                      ? `(Probationary)`
+                      ? ` (Probationary)`
                       : ""
                   } | ${r.mode}`
               )
