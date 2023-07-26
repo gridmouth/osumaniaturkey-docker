@@ -195,6 +195,7 @@ export class VerificationManager {
 
   async validateOsuUser() {
     try {
+      this.Logger.printInfo(`Validating osu!user`);
       await this.osuApi.validateOauthToken();
 
       const userResponse = await this.osuApi.fetchMe();
@@ -202,6 +203,8 @@ export class VerificationManager {
       if (userResponse.status == 200) {
         this.user = userResponse.data;
       }
+
+      this.Logger.printSuccess(`osu!user validated!`);
 
       return this.handleResponse(200);
     } catch (e) {
@@ -212,7 +215,11 @@ export class VerificationManager {
 
   async syncUsername() {
     try {
+      this.Logger.printInfo(`Syncing username`);
+
       await this.member.setNickname(this.user.username);
+
+      this.Logger.printSuccess(`Username set!`);
 
       return this.handleResponse(200);
     } catch (e) {
@@ -224,12 +231,15 @@ export class VerificationManager {
 
   async addVerifiedRoles() {
     try {
+      this.Logger.printInfo(`Adding verified roles`);
+
       const allRoles = await verifiedroles.find();
 
       for (const role of allRoles) {
         await this.member.roles.add(role._id);
       }
 
+      this.Logger.printSuccess(`Verified roles added!`);
       return this.handleResponse(200);
     } catch (e) {
       console.error(e);
@@ -240,6 +250,8 @@ export class VerificationManager {
 
   async addRankRoles() {
     try {
+      this.Logger.printInfo(`Adding rank roles`);
+
       const rankRoles = await rankroles.find();
 
       await this.member.fetch(true);
@@ -262,6 +274,7 @@ export class VerificationManager {
         }
       }
 
+      this.Logger.printSuccess(`Rank roles added!`);
       return this.handleResponse(200);
     } catch (e) {
       console.error(e);
@@ -272,6 +285,8 @@ export class VerificationManager {
 
   async syncUsergroupRoles() {
     try {
+      this.Logger.printInfo(`Adding usergroup roles`);
+
       const groupRoles = await grouproles.find();
 
       for (const role of groupRoles) {
@@ -302,6 +317,8 @@ export class VerificationManager {
         }
       }
 
+      this.Logger.printSuccess(`Usergroup roles added!`);
+
       return this.handleResponse(200);
     } catch (e) {
       console.error(e);
@@ -312,6 +329,8 @@ export class VerificationManager {
 
   async fetchMember() {
     try {
+      this.Logger.printInfo(`Fetching member`);
+
       const guild = await Discord.guilds.fetch(process.env.DISCORD_GUILD);
 
       if (!guild) {
@@ -327,6 +346,8 @@ export class VerificationManager {
       }
 
       this.member = member;
+
+      this.Logger.printSuccess(`Member found!`);
 
       return this.handleResponse<undefined>(200);
     } catch (e) {
