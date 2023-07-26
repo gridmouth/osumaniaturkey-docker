@@ -6,6 +6,7 @@ import { GuildMember } from "discord.js";
 import { users } from "../../database/database";
 import status from "statuses";
 import { ApiResponse } from "../../types/generics";
+import { stringify } from "querystring";
 
 export class OsuApi {
   private code: string;
@@ -20,9 +21,9 @@ export class OsuApi {
     const token = (await axios("https://osu.ppy.sh/oauth/token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      data: JSON.stringify({
+      data: stringify({
         client_id: process.env.OSU_CLIENT_ID,
         client_secret: process.env.OSU_CLIENT_SECRET,
         code: this.code,
