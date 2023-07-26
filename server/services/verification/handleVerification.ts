@@ -209,6 +209,7 @@ export class VerificationManager {
       return this.handleResponse(200);
     } catch (e) {
       console.error(e);
+
       return this.handleResponse(500);
     }
   }
@@ -236,7 +237,7 @@ export class VerificationManager {
       const allRoles = await verifiedroles.find();
 
       for (const role of allRoles) {
-        await this.member.roles.add(role._id);
+        this.member.roles.add(role._id);
       }
 
       this.Logger.printSuccess(`Verified roles added!`);
