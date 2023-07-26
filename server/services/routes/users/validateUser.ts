@@ -54,7 +54,13 @@ export async function validateUser(req: Request, res: Response) {
     osuCode: osuToken,
   });
 
-  await verification.fetchMember();
+  const member = await verification.fetchMember();
+
+  if (member.status != 200) {
+    Logger.printError(`Error during member verification: ${member.status}`);
+
+    return res.status(member.status).send(member);
+  }
 
   const response = await verification.validateUser();
 
