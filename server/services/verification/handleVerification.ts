@@ -327,6 +327,8 @@ export class VerificationManager {
       }
 
       this.member = member;
+
+      return this.handleResponse<undefined>(200);
     } catch (e) {
       console.error(e);
 
