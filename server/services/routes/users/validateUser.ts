@@ -9,6 +9,10 @@ import { QueryWithHelpers } from "mongoose";
 import { LoggerService } from "../../../helpers/LoggerService";
 
 export async function validateUser(req: Request, res: Response) {
+  const Logger = new LoggerService(req.path);
+
+  Logger.printInfo(`New verification requested`);
+
   if (!req.body)
     return res.status(400).send({
       status: 400,
@@ -18,7 +22,8 @@ export async function validateUser(req: Request, res: Response) {
 
   const verificationKey = req.body.key;
   const osuToken = req.body.osuToken;
-  const Logger = new LoggerService(req.path);
+
+  Logger.printInfo(`Verification key detected: ${verificationKey}`);
 
   if (
     !verificationKey ||
@@ -34,6 +39,8 @@ export async function validateUser(req: Request, res: Response) {
       data: null,
     });
 
+  Logger.printInfo(`Key and osu token are valid for: ${verificationKey}`);
+
   const targetVerification = await verifications.findOne({
     key: verificationKey,
   });
@@ -45,6 +52,8 @@ export async function validateUser(req: Request, res: Response) {
       data: null,
     });
 
+  Logger.printInfo(`Valid database entity for: ${verificationKey}`);
+
   const verification = new VerificationManager({
     verification: targetVerification as unknown as QueryWithHelpers<
       unknown,
@@ -55,6 +64,8 @@ export async function validateUser(req: Request, res: Response) {
   });
 
   const member = await verification.fetchMember();
+
+  Logger.printInfo(`Member exists for key: ${verificationKey}`);
 
   if (member.status != 200) {
     Logger.printError(`Error during member verification: ${member.status}`);
@@ -70,5 +81,5 @@ export async function validateUser(req: Request, res: Response) {
     Logger.printError(`Error during member verification: ${response.status}`);
   }
 
-  res.status(response.status).send(response);
+  return res.status(response.status).send(response);
 }
