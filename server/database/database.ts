@@ -5,6 +5,7 @@ import GroupRoles from "./schemas/GroupRoles";
 import RankRoles from "./schemas/RankRoles";
 import User from "./schemas/User";
 import VerifiedRole from "./schemas/VerifiedRole";
+import UnverifiedRole from "./schemas/UnverifiedRole";
 
 const logger = new LoggerService("Database");
 
@@ -25,3 +26,4 @@ export const grouproles = mongoose.model("GroupRoles", GroupRoles);
 export const rankroles = mongoose.model("RankRoles", RankRoles);
 export const users = mongoose.model("Users", User);
 export const verifiedroles = mongoose.model("VerifiedRoles", VerifiedRole);
+export const unverifiedroles = mongoose.model("VerifiedRoles", UnverifiedRole);

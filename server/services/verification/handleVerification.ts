@@ -7,6 +7,7 @@ import { LoggerService } from "../../helpers/LoggerService";
 import {
   grouproles,
   rankroles,
+  unverifiedroles,
   users,
   verifications,
   verifiedroles,
@@ -174,6 +175,9 @@ export class VerificationManager {
       const verifiedRoles = await this.addVerifiedRoles();
       if (verifiedRoles.status != 200) return verifiedRoles;
 
+      const unverifiedRoles = await this.removeUnverifiedRoles();
+      if (unverifiedRoles.status != 200) return unverifiedRoles;
+
       if (!isStatic)
         await verifications.deleteOne({ _id: this.verification._id });
 
@@ -190,6 +194,26 @@ export class VerificationManager {
       console.error(e);
 
       return this.handleResponse(500);
+    }
+  }
+
+  async removeUnverifiedRoles() {
+    try {
+      const rolesToRemove = await unverifiedroles.find();
+
+      for (const role of rolesToRemove) {
+        await this.member.roles.remove(role._id);
+
+        this.Logger.printSuccess(
+          `Removed unverified role ${role._id} from ${this.member.user.username}`
+        );
+      }
+
+      return this.handleResponse(200);
+    } catch (e) {
+      console.error(e);
+
+      this.handleResponse(500);
     }
   }
 

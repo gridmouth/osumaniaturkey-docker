@@ -16,7 +16,7 @@ import { LoggerService } from "../../helpers/LoggerService";
 import { DiscordCommands } from "./commands";
 import generateErrorEmbedWithTitle from "./helpers/generateErrorEmbedWithTitle";
 import { VerificationManager } from "../verification/handleVerification";
-import { users, verifications } from "../../database/database";
+import { unverifiedroles, users, verifications } from "../../database/database";
 
 export function checkMemberPermissions(
   member: GuildMember,
@@ -68,6 +68,20 @@ export class DiscordBot extends Client {
       if (command.isButton())
         this.handleVerificationRequest.bind(this)(command);
     });
+
+    this.on("guildMemberAdd", this.handleMemberJoin.bind(this));
+  }
+
+  async handleMemberJoin(member: GuildMember) {
+    const rolesToAdd = await unverifiedroles.find();
+
+    for (const role of rolesToAdd) {
+      await member.roles.add(role._id);
+
+      this.Logger.printSuccess(
+        `Added unverified role ${role._id} to ${member.user.username}`
+      );
+    }
   }
 
   async handleVerificationRequest(button: ButtonInteraction) {
