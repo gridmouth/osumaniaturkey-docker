@@ -26,4 +26,7 @@ export const grouproles = mongoose.model("GroupRoles", GroupRoles);
 export const rankroles = mongoose.model("RankRoles", RankRoles);
 export const users = mongoose.model("Users", User);
 export const verifiedroles = mongoose.model("VerifiedRoles", VerifiedRole);
-export const unverifiedroles = mongoose.model("VerifiedRoles", UnverifiedRole);
+export const unverifiedroles = mongoose.model(
+  "UnverifiedRoles",
+  UnverifiedRole
+);
