@@ -202,7 +202,7 @@ export class VerificationManager {
       const rolesToRemove = await unverifiedroles.find();
 
       for (const role of rolesToRemove) {
-        await this.member.roles.remove(role._id);
+        this.member.roles.remove(role._id);
 
         this.Logger.printSuccess(
           `Removed unverified role ${role._id} from ${this.member.user.username}`
