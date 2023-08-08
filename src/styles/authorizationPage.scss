@@ -7,16 +7,17 @@
   align-content: center;
   justify-content: center;
   align-items: center;
-  backdrop-filter: contrast(1.1);
-  background-color: #00000038;
+  backdrop-filter: blur(3px);
+  // backdrop-filter: contrast(1.1);
+  // background-color: #00000038;
 
   .loading_container {
     width: 100%;
     height: fit-content;
     max-width: 550px;
     max-height: 90%;
-    background: #1a1a1a;
-    border: 1px solid #4ebc7f;
+    background: #3b110d;
+    border: 1px solid #c76c0e;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -29,7 +30,7 @@
       height: 20%;
       min-height: 140px;
       background-image: url(/public/logo.png);
-      background-size: 40%;
+      background-size: 60%;
       background-position: center;
       background-repeat: no-repeat;
     }
