@@ -6,7 +6,7 @@ import { LoggerService } from "./helpers/LoggerService";
 import { ApiRouter } from "./routes";
 import { connectToDatabase } from "./database/database";
 import { DiscordBot } from "./services/discord/DiscordBot";
-// import { syncAllMembers } from "./services/verification/handleVerification";
+import { syncAllMembers } from "./services/verification/handleVerification";
 import { OsuApi } from "./services/osu/OsuApi";
 import { resolve } from "path";
 const app = express();
@@ -19,7 +19,7 @@ export const Discord = new DiscordBot();
 Discord.connect();
 
 new OsuApi().startTokenGeneration().then(() => {
-  //syncAllMembers().catch(console.error);
+  syncAllMembers().catch(console.error);
 });
 
 app.use(express.json());
