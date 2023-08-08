@@ -283,14 +283,14 @@ export class VerificationManager {
 
       for (const role of rankRoles) {
         if (
-          this.user.statistics_rulesets.osu &&
-          this.user.statistics_rulesets.osu.global_rank &&
+          this.user.statistics &&
+          this.user.statistics.global_rank &&
           role.roleId &&
           this.user.is_active
         ) {
           if (
-            this.user.statistics_rulesets.osu.global_rank >= (role.min || 0) &&
-            this.user.statistics_rulesets.osu.global_rank <= (role.max || 0)
+            this.user.statistics.global_rank >= (role.min || 0) &&
+            this.user.statistics.global_rank <= (role.max || 0)
           ) {
             await this.member.roles.add(role.roleId);
           } else {
