@@ -126,7 +126,7 @@ export class OsuApi {
   }
 
   fetchMe() {
-    return axios("https://osu.ppy.sh/api/v2/me/osu", {
+    return axios("https://osu.ppy.sh/api/v2/me", {
       headers: {
         Authorization: `Bearer ${this.access_token}`,
       },
