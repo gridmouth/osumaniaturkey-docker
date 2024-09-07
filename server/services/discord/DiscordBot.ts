@@ -1,5 +1,6 @@
 import {
   ActionRowBuilder,
+  AttachmentBuilder,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
@@ -10,6 +11,7 @@ import {
   GuildMember,
   PermissionResolvable,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
+  TextChannel,
 } from "discord.js";
 
 import { LoggerService } from "../../helpers/LoggerService";
@@ -17,6 +19,8 @@ import { DiscordCommands } from "./commands";
 import generateErrorEmbedWithTitle from "./helpers/generateErrorEmbedWithTitle";
 import { VerificationManager } from "../verification/handleVerification";
 import { unverifiedroles, users, verifications } from "../../database/database";
+import path from "path";
+import { readFileSync } from "fs";
 
 export function checkMemberPermissions(
   member: GuildMember,
@@ -36,7 +40,9 @@ export function checkMemberPermissions(
 }
 
 export class DiscordBot extends Client {
+  public static latestMultiplayerPing = null;
   private Logger = new LoggerService("Discord");
+  private static Logger = new LoggerService("Discord");
 
   constructor() {
     super({
@@ -49,6 +55,12 @@ export class DiscordBot extends Client {
         "Guilds",
       ],
     });
+  }
+
+  public static someoneUsedMultiplayerPing() {
+    DiscordBot.latestMultiplayerPing = new Date();
+
+    return this;
   }
 
   connect() {
@@ -82,22 +94,86 @@ export class DiscordBot extends Client {
         `Added unverified role ${role._id} to ${member.user.username}`
       );
     }
+
+    DiscordBot.sendEmbedIntoDms(member, true);
+  }
+
+  static async sendEmbedIntoDms(member: GuildMember, pingWhenError?: boolean) {
+    const attachmet = new AttachmentBuilder(
+      readFileSync(path.resolve("./public/logosmall.png")),
+      { name: "logo.png" }
+    );
+
+    const responseEmbed = new EmbedBuilder()
+      .setTitle("🇹🇷 osu!türkiye Doğrulama ✅")
+      .setDescription(
+        `Sunucumuza erişmek için öncelikle osu! hesabınızı bağlamanız gerekli, doğrulama yaptıktan sonra sunucuya erişebileceksiniz.
+        Lütfen aşağıdaki tuşa tıklayın ve doğrulama aşamalarını izleyin.`
+      )
+      .setThumbnail("attachment://logo.png")
+      .setColor("#ac0600");
+
+    // const channel = command.options.getChannel(
+    //   "channel",
+    //   true
+    // ) as TextBasedChannel;
+
+    const verifyButtonComponent = new ButtonBuilder()
+      .setStyle(ButtonStyle.Secondary)
+      .setLabel("Doğrulamayı başlat ✅")
+      .setCustomId("generateVerification");
+
+    const verifyButton = new ActionRowBuilder<ButtonBuilder>().setComponents(
+      verifyButtonComponent
+    );
+
+    member
+      .createDM()
+      .then((dmchannel) => {
+        dmchannel
+          .send({
+            embeds: [responseEmbed],
+            files: [attachmet],
+            components: [verifyButton],
+          })
+          .catch((e) => {
+            this.Logger.printError("Cannot create dm for user", e);
+
+            if (pingWhenError) this.sendEphemeralPing(member);
+          });
+      })
+      .catch((e) => {
+        this.Logger.printError("Cannot create dm for user", e);
+
+        if (pingWhenError) this.sendEphemeralPing(member);
+      });
+  }
+
+  private static sendEphemeralPing(member: GuildMember) {
+    const channel = member.guild.channels.cache.get(
+      process.env.DISCORD_CHANNEL
+    );
+
+    if (channel.isTextBased()) {
+      channel.send(`<@${member.user.id}>`).then((message) => {
+        setTimeout(() => message.delete(), 240);
+      });
+    }
   }
 
   async handleVerificationRequest(button: ButtonInteraction) {
     try {
-      if (
-        button.customId != "generateVerification" ||
-        !button.member ||
-        !button.guild
-      )
-        return;
+      if (button.customId != "generateVerification") return;
+
+      const guild = await this.guilds.fetch(process.env.DISCORD_GUILD);
+
+      const member = await guild.members.fetch(button.user.id);
 
       await button.deferReply({ ephemeral: true });
 
       const newVerification =
         await VerificationManager.createNewVerificationToken(
-          button.member as GuildMember
+          member as GuildMember
         );
 
       if (!newVerification.data || newVerification.status != 200)
@@ -125,8 +201,8 @@ export class DiscordBot extends Client {
         .setDescription(
           `Sunucuya erişebilmek için hesabını [buradan](${verificationURL}) doğrula`
         )
-        .setColor("#4ebc7f")
-        .setThumbnail(button.guild.iconURL());
+        .setColor("#ac0600")
+        .setThumbnail(member.guild.iconURL());
 
       const verifyButton = new ButtonBuilder()
         .setLabel("Doğrulamayı başlat")

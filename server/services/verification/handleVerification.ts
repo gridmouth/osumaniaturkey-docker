@@ -199,19 +199,28 @@ export class VerificationManager {
 
   async removeUnverifiedRoles() {
     try {
+      this.Logger.printInfo("Removing unverified roles");
+
       const rolesToRemove = await unverifiedroles.find();
 
       for (const role of rolesToRemove) {
-        this.member.roles.remove(role._id);
+        try {
+          await this.member.roles.remove(role._id);
 
-        this.Logger.printSuccess(
-          `Removed unverified role ${role._id} from ${this.member.user.username}`
-        );
+          this.Logger.printSuccess(
+            `Removed unverified role ${role._id} from ${this.member.user.username}`
+          );
+        } catch (e) {
+          this.Logger.printError(
+            `Cannot remove unverified role ${role._id}: `,
+            e
+          );
+        }
       }
 
       return this.handleResponse(200);
     } catch (e) {
-      console.error(e);
+      this.Logger.printError("Cannot remove unverified roles: ", e);
 
       this.handleResponse(500);
     }
@@ -261,7 +270,11 @@ export class VerificationManager {
       const allRoles = await verifiedroles.find();
 
       for (const role of allRoles) {
-        this.member.roles.add(role._id);
+        try {
+          await this.member.roles.add(role._id);
+        } catch (e) {
+          this.Logger.printError(`Cannot add role ${role._id}: `, e);
+        }
       }
 
       this.Logger.printSuccess(`Verified roles added!`);
