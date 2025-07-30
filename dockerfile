@@ -1,0 +1,26 @@
+FROM node:21-alpine3.19
+
+WORKDIR /app
+
+COPY yarn.lock package.json ./
+
+RUN yarn install
+
+RUN yarn build
+
+COPY . .
+
+ENV PORT=3030
+ENV OSU_CALLBACK_URL=""
+ENV OSU_CLIENT_SECRET=""
+ENV OSU_CLIENT_ID=""
+ENV MONGO_CONNECTION=""
+ENV DISCORD_TOKEN=""
+ENV DISCORD_GUILD=""
+ENV DISCORD_CHANNEL=""
+ENV OSU_TOKEN=""
+ENV WEBSITE_DOMAIN=""
+
+EXPOSE 3000
+
+CMD ["yarn", "production"]
