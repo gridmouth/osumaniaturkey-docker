@@ -105,7 +105,7 @@ export class DiscordBot extends Client {
     );
 
     const responseEmbed = new EmbedBuilder()
-      .setTitle("🇹🇷 osu!türkiye Doğrulama ✅")
+      .setTitle("🇹🇷 osu!mania Türkiye Doğrulama ✅")
       .setDescription(
         `Sunucumuza erişmek için öncelikle osu! hesabınızı bağlamanız gerekli, doğrulama yaptıktan sonra sunucuya erişebileceksiniz.
         Lütfen aşağıdaki tuşa tıklayın ve doğrulama aşamalarını izleyin.`
