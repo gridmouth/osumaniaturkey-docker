@@ -33,7 +33,7 @@ if (process.env.NODE_ENV == "production") {
     res.status(200).sendFile(resolve("./dist/index.html"));
   });
 
-  app.listen(process.env.PORT || 3000, () => {
+  app.listen(process.env.PORT, () => {
     logger.printSuccess(`Listening on port ${app.settings.port}`);
   });
 }
