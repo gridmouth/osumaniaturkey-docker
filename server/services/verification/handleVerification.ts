@@ -296,14 +296,14 @@ export class VerificationManager {
 
       for (const role of rankRoles) {
         if (
-          this.user.statistics &&
-          this.user.statistics.global_rank &&
+          this.user.statistics_rulesets.mania &&
+          this.user.statistics_rulesets.mania.global_rank &&
           role.roleId &&
           this.user.is_active
         ) {
           if (
-            this.user.statistics.global_rank >= (role.min || 0) &&
-            this.user.statistics.global_rank <= (role.max || 0)
+            this.user.statistics_rulesets.mania.global_rank >= (role.min || 0) &&
+            this.user.statistics_rulesets.mania.global_rank <= (role.max || 0)
           ) {
             await this.member.roles.add(role.roleId);
           } else {

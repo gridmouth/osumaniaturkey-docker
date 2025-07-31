@@ -117,6 +117,7 @@ export class OsuApi {
   fetchUsers(ids: URLSearchParams) {
     const url = new URL("https://osu.ppy.sh/api/v2/users");
     ids.getAll("ids[]").map((p) => url.searchParams.append("ids[]", p));
+    url.searchParams.append("include_variant_statistics", "true");
 
     return axios(url.href, {
       headers: {
